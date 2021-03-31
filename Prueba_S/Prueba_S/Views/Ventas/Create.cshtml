@@ -1,0 +1,173 @@
+﻿@model Prueba_S.Models.Venta
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Venta</h4>
+<hr />
+<div class="">
+    <div class="">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-4">
+                    <label asp-for="fecha" class="control-label"></label>
+                    <input asp-for="fecha" class="form-control" />
+                    <span asp-validation-for="fecha" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-2">
+                    <label class="control-label">Cod Cliente</label>
+                    <input class="form-control" id="Cliente" type="text" />
+
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="Cliente.NomCliente" class="control-label"></label>
+                    <select asp-for="Cliente.NomCliente" class="form-control" asp-items="ViewBag.ClientsID">
+                        <option value="">-- Select Cliente --</option>
+                    </select>
+                    <span asp-validation-for="Cliente.NomCliente" class="text-danger" />
+                </div>
+            </div>
+            <br />
+
+
+            <div class="row">
+
+                <div class="form-group col-3">
+                    <label asp-for="Producto.NomProducto" class="control-label"></label>
+                    <select asp-for="Producto.NomProducto" class="form-control" asp-items="ViewBag.ProductID">
+                        <option value="">-- Select Cliente --</option>
+                    </select>
+                    <span asp-validation-for="Producto.NomProducto" class="text-danger" />
+
+                </div>
+                <div class="form-group col-2">
+                    <label asp-for="Cantidad" class="control-label"></label>
+                    <input asp-for="Cantidad" class="form-control" />
+                    <span asp-validation-for="Cantidad" class="text-danger"></span>
+                </div>
+                <div class="form-group col-2">
+                    <label asp-for="ValorUnitario" class="control-label"></label>
+                    <input asp-for="ValorUnitario" class="form-control" />
+                    <span asp-validation-for="ValorUnitario" class="text-danger"></span>
+                </div>
+                <br />
+
+                <input value="Agregar" type="button" onclick="AgregaConcepto(); return false;" class="btn btn-primary" />
+
+            </div>
+            <br />
+            <div class="row">
+
+
+               
+         
+
+                <div id="divConceptos">
+                    <table class="table" id="tablaConceptos" style="width:100%;">
+                        <tr>
+                            <th>Codigo Producto</th>
+                            <th>Nombre Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio unitario</th>
+                            <th>Valor Total</th>
+                        </tr>
+
+                    </table>
+
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <br /> <br /> <br />
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    var num = 0;
+    var combo = document.getElementById("Producto_NomProducto");
+    function AgregaConcepto() {
+
+        let codigo = document.getElementById("Producto_NomProducto").value;
+        let Nombre = combo.options[combo.selectedIndex].text;
+        let Cantidad = document.getElementById("Cantidad").value;
+        let Precio = document.getElementById("ValorUnitario").value;
+      
+       
+       
+
+        //agregamos tabla
+        let Tabla = document.getElementById("tablaConceptos");
+        let TR = document.createElement("tr");
+        let TDCodigo = document.createElement("td");
+        let TDNombre = document.createElement("td");
+        let TDCantidad = document.createElement("td");       
+        let TDPrecio = document.createElement("td");
+        let TDTotal = document.createElement("td");
+        TR.appendChild(TDCodigo);
+        TR.appendChild(TDNombre);
+        TR.appendChild(TDCantidad);       
+        TR.appendChild(TDPrecio);
+        TR.appendChild(TDTotal);
+        TDCodigo.innerHTML = codigo;
+        TDNombre.innerHTML = Nombre;
+        TDCantidad.innerHTML = Cantidad;     
+        TDPrecio.innerHTML = Precio;
+        TDTotal.innerHTML = parseFloat(Cantidad) * parseFloat(Precio);
+        Tabla.appendChild(TR);
+
+        //agregamos hiddens
+        let DivConceptos = document.getElementById("divConceptos");
+        let HiddenIndex = document.createElement("input");
+        let HiddenCantidad = document.createElement("input");
+        let HiddenNombre = document.createElement("input");
+        let HiddenPrecio = document.createElement("input");
+        let HiddenCodigo= document.createElement("input");
+        HiddenIndex.name = "conceptos.Index";
+        HiddenIndex.value = num;
+        HiddenCodigo.type = "hidden";
+        HiddenCodigo.name = "conceptos[" + num + "].codigo";
+        HiddenCodigo.value = codigo;
+        HiddenCantidad.type = "hidden";
+        HiddenNombre.name = "conceptos[" + num + "].Nombre";
+        HiddenNombre.value = Nombre;
+        HiddenIndex.type = "hidden";
+        HiddenCantidad.name = "conceptos[" + num + "].Cantidad";
+        HiddenCantidad.value = Cantidad;       
+        HiddenNombre.type = "hidden";
+        HiddenPrecio.name = "conceptos[" + num + "].PrecioUnitario";
+        HiddenPrecio.value = Precio;
+        HiddenPrecio.type = "hidden";
+        DivConceptos.appendChild(HiddenIndex);
+        DivConceptos.appendChild(HiddenCantidad);
+        DivConceptos.appendChild(HiddenNombre);
+        DivConceptos.appendChild(HiddenPrecio);
+        DivConceptos.appendChild(HiddenCodigo);
+
+        document.getElementById("Cantidad").value = "";
+        document.getElementById("ValorUnitario").value = "";
+        document.getElementById("Producto_NomProducto").value = "";
+
+        num++;
+    }
+
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

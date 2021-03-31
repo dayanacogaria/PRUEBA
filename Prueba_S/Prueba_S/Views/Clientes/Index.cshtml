@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Prueba_S.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CodCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ciudad)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodCliente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomCliente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ciudad)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CodCliente">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CodCliente">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CodCliente">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
